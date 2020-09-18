@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "UnitTest\UnitTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SingleInstance", "SingleInstance\SingleInstance.csproj", "{330B0D7F-D169-451F-B1C9-5C5946F0D13E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ARSoft.Tools.Net", "ARSoft.Tools.Net\ARSoft.Tools.Net\ARSoft.Tools.Net.csproj", "{31034E87-7BFA-40E2-AAA9-B5C13E5D6C4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{330B0D7F-D169-451F-B1C9-5C5946F0D13E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{330B0D7F-D169-451F-B1C9-5C5946F0D13E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{330B0D7F-D169-451F-B1C9-5C5946F0D13E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31034E87-7BFA-40E2-AAA9-B5C13E5D6C4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31034E87-7BFA-40E2-AAA9-B5C13E5D6C4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31034E87-7BFA-40E2-AAA9-B5C13E5D6C4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31034E87-7BFA-40E2-AAA9-B5C13E5D6C4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

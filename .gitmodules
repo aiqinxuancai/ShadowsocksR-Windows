@@ -4,3 +4,6 @@
 [submodule "SingleInstance"]
 	path = SingleInstance
 	url = https://github.com/HMBSbige/SingleInstance
+[submodule "ARSoft.Tools.Net"]
+	path = ARSoft.Tools.Net
+	url = https://github.com/HMBSbige/ARSoft.Tools.Net.git
