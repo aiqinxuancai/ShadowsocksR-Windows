@@ -47,7 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ARSoft.Tools.Net" Version="2.3.0" />
     <PackageReference Include="CryptoBase" Version="1.7.2" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="HMBSbige.SingleInstance" Version="6.0.1" />
@@ -61,6 +60,10 @@
     <PackageReference Include="WindowsProxy" Version="6.0.0" />
     <PackageReference Include="WpfColorFontDialog" Version="1.0.8" />
     <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ARSoft.Tools.Net\ARSoft.Tools.Net.csproj" />
   </ItemGroup>
 
   <ItemGroup>

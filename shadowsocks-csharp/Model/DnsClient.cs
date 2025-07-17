@@ -231,6 +231,7 @@ public class DnsClient : ViewModelBase
         return res[1] ?? res[0];
     }
 
+    // Replace the following methods with the correct type for DnsOverTlsClient
     private static async Task<IPAddress?> QueryBaseTlsAAsync(DnsOverTlsClient client, DomainName domain, DnsQueryOptions options, CancellationToken ct)
     {
         DnsMessage? message = null;
