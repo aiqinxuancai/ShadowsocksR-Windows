@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "UnitTest\UnitTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARSoft.Tools.Net", "ARSoft.Tools.Net\ARSoft.Tools.Net.csproj", "{3DC6C66D-FA67-D010-ACE3-1CF7ECC21C59}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ARSoft.Tools.Net", "ARSoft.Tools.Net\ARSoft.Tools.Net\ARSoft.Tools.Net.csproj", "{31034E87-7BFA-40E2-AAA9-B5C13E5D6C4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +25,14 @@ Global
 		{C4B1E5EC-C6BE-4726-B8CA-B4C84D4852B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4B1E5EC-C6BE-4726-B8CA-B4C84D4852B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4B1E5EC-C6BE-4726-B8CA-B4C84D4852B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3DC6C66D-FA67-D010-ACE3-1CF7ECC21C59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3DC6C66D-FA67-D010-ACE3-1CF7ECC21C59}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3DC6C66D-FA67-D010-ACE3-1CF7ECC21C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3DC6C66D-FA67-D010-ACE3-1CF7ECC21C59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{330B0D7F-D169-451F-B1C9-5C5946F0D13E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{330B0D7F-D169-451F-B1C9-5C5946F0D13E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{330B0D7F-D169-451F-B1C9-5C5946F0D13E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{330B0D7F-D169-451F-B1C9-5C5946F0D13E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31034E87-7BFA-40E2-AAA9-B5C13E5D6C4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31034E87-7BFA-40E2-AAA9-B5C13E5D6C4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31034E87-7BFA-40E2-AAA9-B5C13E5D6C4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31034E87-7BFA-40E2-AAA9-B5C13E5D6C4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
