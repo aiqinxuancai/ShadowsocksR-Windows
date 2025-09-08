@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     env:
       SyncfusionLicenseKey: ${{ secrets.SyncfusionLicenseKey }}
-      NET_TFM: net7.0-windows
+      NET_TFM: net9.0-windows
       Configuration: Release
 
     steps:
