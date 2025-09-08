@@ -41,6 +41,7 @@ namespace Shadowsocks.Model
         private bool _sameHostForSameTarget;
         private bool _isPreRelease;
         private bool _autoCheckUpdate;
+        private int _subscribeUpdateInterval;
         private string _langName;
         private List<DnsClient> _dnsClients;
         private List<ServerSubscribe> _serverSubscribes;
@@ -189,6 +190,11 @@ namespace Shadowsocks.Model
         /// 自动检查更新
         /// </summary>
         public bool AutoCheckUpdate { get => _autoCheckUpdate; set => SetField(ref _autoCheckUpdate, value); }
+
+        /// <summary>
+        /// 订阅更新间隔（分钟）
+        /// </summary>
+        public int SubscribeUpdateInterval { get => _subscribeUpdateInterval; set => SetField(ref _subscribeUpdateInterval, value); }
 
         /// <summary>
         /// 所选的语言
@@ -474,6 +480,7 @@ namespace Shadowsocks.Model
             SameHostForSameTarget = true;
             IsPreRelease = false;
             AutoCheckUpdate = true;
+            SubscribeUpdateInterval = 60;
             LangName = string.Empty;
             DnsClients = new List<DnsClient>
             {
@@ -517,6 +524,7 @@ namespace Shadowsocks.Model
             SameHostForSameTarget = config.SameHostForSameTarget;
             IsPreRelease = config.IsPreRelease;
             AutoCheckUpdate = config.AutoCheckUpdate;
+            SubscribeUpdateInterval = config.SubscribeUpdateInterval;
             LangName = config.LangName;
             DnsClients = config.DnsClients;
             ServerSubscribes = config.ServerSubscribes;

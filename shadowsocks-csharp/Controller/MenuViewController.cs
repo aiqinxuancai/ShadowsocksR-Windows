@@ -129,7 +129,7 @@ namespace Shadowsocks.Controller
 
         private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            timerDelayCheckUpdate.Interval = 1000.0 * 60 * 60 * 1;// 1 hour
+            timerDelayCheckUpdate.Interval = 1000.0 * 60 * Global.GuiConfig.SubscribeUpdateInterval;
 
             var cfg = Global.GuiConfig;
             if (cfg.AutoCheckUpdate)

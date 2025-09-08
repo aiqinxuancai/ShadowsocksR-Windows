@@ -166,6 +166,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -175,6 +176,7 @@
                 <Label Grid.Row="1" Grid.Column="0" Content="{DynamicResource ReconnectTimes}" VerticalAlignment="Center" Margin="0,0,10,0" />
                 <Label Grid.Row="2" Grid.Column="0" Content="{DynamicResource ConnectTimeout}" VerticalAlignment="Center" Margin="0,0,10,0" />
                 <Label Grid.Row="3" Grid.Column="0" Content="{DynamicResource Ttl}" VerticalAlignment="Center" Margin="0,0,10,0" />
+                <Label Grid.Row="4" Grid.Column="0" Content="{DynamicResource SubscribeUpdateInterval}" VerticalAlignment="Center" Margin="0,0,10,0" />
 
                 <controls:NumberUpDown Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Height="23.24" MinNum="0" MaxNum="20" 
                 Value="{Binding ModifiedConfiguration.ReconnectTimes,Mode=TwoWay}"/>
@@ -182,6 +184,8 @@
                 Value="{Binding ModifiedConfiguration.ConnectTimeout,Mode=TwoWay}"/>
                 <controls:NumberUpDown Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Height="23.24" MinNum="0" MaxNum="600" 
                 Value="{Binding ModifiedConfiguration.Ttl,Mode=TwoWay}"/>
+                <controls:NumberUpDown Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Height="23.24" MinNum="1" MaxNum="1440"
+                Value="{Binding ModifiedConfiguration.SubscribeUpdateInterval,Mode=TwoWay}"/>
             </Grid>
         </GroupBox>
         <Grid Grid.Row="2" Grid.Column="1" Margin="54,10,0,10" HorizontalAlignment="Right" Width="246">

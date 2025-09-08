@@ -43,6 +43,7 @@
     <sys:String x:Key="SetDefault">重置預設值</sys:String>
     <sys:String x:Key="ReconnectTimes">重連次數</sys:String>
     <sys:String x:Key="ConnectTimeout">連接逾時</sys:String>
-    <sys:String x:Key="Ttl">空閒斷開秒數</sys:String>
+        <sys:String x:Key="Ttl">閒置斷開</sys:String>
+    <sys:String x:Key="SubscribeUpdateInterval">訂閱更新間隔 (分鐘)</sys:String>
 
 </ResourceDictionary>
