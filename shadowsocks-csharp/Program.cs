@@ -4,7 +4,6 @@ using Shadowsocks.Controller;
 using Shadowsocks.Enums;
 using Shadowsocks.Model;
 using Shadowsocks.Util;
-using SingleInstance;
 using System;
 using System.IO;
 using System.Linq;
@@ -22,13 +21,13 @@ namespace Shadowsocks
         {
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Utils.GetExecutablePath()) ?? throw new InvalidOperationException());
             var identifier = $@"Global\{Controller.HttpRequest.UpdateChecker.Name}_{Directory.GetCurrentDirectory().GetClassicHashCode()}";
-            using var singleInstance = new SingleInstanceService(identifier);
-            if (!singleInstance.TryStartSingleInstance())
-            {
-                SendCommand(singleInstance, args.Length <= 0 ? Constants.ParameterMultiplyInstance : string.Join(' ', args));
-                return;
-            }
-            using var d = singleInstance.Received.Subscribe(ArgumentsReceived);
+            //using var singleInstance = new SingleInstanceService(identifier);
+            //if (!singleInstance.TryStartSingleInstance())
+            //{
+            //    SendCommand(singleInstance, args.Length <= 0 ? Constants.ParameterMultiplyInstance : string.Join(' ', args));
+            //    return;
+            //}
+//            using var d = singleInstance.Received.Subscribe(ArgumentsReceived);
 
             var app = new Application
             {
@@ -87,7 +86,7 @@ namespace Shadowsocks
             Reg.SetUrlProtocol(@"ssr");
             Reg.SetUrlProtocol(@"sub");
 
-            singleInstance.StartListenServer();
+            //singleInstance.StartListenServer();
             app.Run();
         }
 
@@ -156,17 +155,17 @@ namespace Shadowsocks
             }
         }
 
-        private static void SendCommand(ISingleInstanceService service, string command)
-        {
-            try
-            {
-                service.SendMessageToFirstInstanceAsync(command).GetAwaiter().GetResult();
-            }
-            catch
-            {
-                // ignored
-            }
-        }
+        //private static void SendCommand(ISingleInstanceService service, string command)
+        //{
+        //    try
+        //    {
+        //        service.SendMessageToFirstInstanceAsync(command).GetAwaiter().GetResult();
+        //    }
+        //    catch
+        //    {
+        //        // ignored
+        //    }
+        //}
 
         private static void ArgumentsReceived((string, Action<string>) receive)
         {
