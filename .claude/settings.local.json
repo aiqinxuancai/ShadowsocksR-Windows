@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build:*)",
+      "Bash(dotnet add:*)",
+      "Bash(findstr:*)",
+      "Bash(ls:*)",
+      "Bash(Select-String -Pattern \"error CS|已成功生成|已用时间\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

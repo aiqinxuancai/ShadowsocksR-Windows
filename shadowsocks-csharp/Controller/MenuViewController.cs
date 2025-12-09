@@ -67,8 +67,9 @@ namespace Shadowsocks.Controller
         private MenuItem AutoCheckUpdateItem;
         private MenuItem AllowPreReleaseItem;
         private ServerConfigWindow _serverConfigWindow;
-        private SettingsWindow _settingsWindow;
-        private DnsSettingWindow _dnsSettingsWindow;
+        private UnifiedSettingsWindow _unifiedSettingsWindow;
+        private WindowTest _testWindow;
+        
 
         #region ServerLogWindow
 
@@ -76,9 +77,6 @@ namespace Shadowsocks.Controller
         private WindowStatus _serverLogWindowStatus;
 
         #endregion
-
-        private PortSettingsWindow _portMapWindow;
-        private SubscribeWindow _subScribeWindow;
         private LogWindow _logWindow;
         private string _urlToOpen;
         private System.Timers.Timer timerDelayCheckUpdate;
@@ -495,11 +493,17 @@ namespace Shadowsocks.Controller
                     }
 
                     //Set SelectedServer
+                    // 设置选中的服务器
                     var selectedIndex = -1;
                     if (selectedServer is not null)
                     {
+                        // 检查当前选中的节点是否属于正在更新的订阅组
+                        var isSelectedFromCurrentSubscribe = selectedServer.SubTag == lastGroup;
+
+                        // 1. 尝试通过ID查找完全相同的服务器实例
                         selectedIndex = config.Configs.FindIndex(server => server.Id == selectedServer.Id);
 
+                        // 2. 如果未找到，尝试查找具有相同订阅标签且匹配详细信息（IP、端口等）的服务器
                         if (selectedIndex < 0)
                         {
                             selectedIndex = config.Configs.FindIndex(server =>
@@ -507,6 +511,7 @@ namespace Shadowsocks.Controller
                             );
                         }
 
+                        // 3. 如果仍然未找到，则按订阅标签、组和备注（名称）匹配
                         if (selectedIndex < 0)
                         {
                             selectedIndex = config.Configs.FindIndex(server =>
@@ -516,6 +521,7 @@ namespace Shadowsocks.Controller
                             );
                         }
 
+                        // 4. 后备方案：按订阅标签和组匹配
                         if (selectedIndex < 0)
                         {
                             selectedIndex = config.Configs.FindIndex(server =>
@@ -524,13 +530,26 @@ namespace Shadowsocks.Controller
                             );
                         }
 
-                        if (selectedIndex < 0)
+                        // 5. 最终后备方案：仅按订阅标签匹配（仅当选中的节点属于当前更新的订阅组时）
+                        if (selectedIndex < 0 && isSelectedFromCurrentSubscribe)
                         {
                             selectedIndex = config.Configs.FindIndex(server => server.SubTag == selectedServer.SubTag);
                         }
                     }
 
-                    config.Index = selectedIndex < 0 ? default : selectedIndex;
+                    // 只有当找到匹配项且匹配项有效时才更新索引
+                    // 如果当前选中的节点不属于正在更新的订阅组，保持原有索引不变
+                    if (selectedIndex >= 0 && selectedIndex < config.Configs.Count)
+                    {
+                        config.Index = selectedIndex;
+                        Logging.Debug($"订阅更新后保持选中节点: Index={selectedIndex}, Server={config.Configs[selectedIndex].FriendlyName}");
+                    }
+                    else if (selectedServer is not null && selectedServer.SubTag == lastGroup)
+                    {
+                        // 如果选中的节点属于当前订阅组但未找到匹配项，记录警告
+                        Logging.Log(LogLevel.Warn, $"订阅更新后无法找到匹配的节点，保持原索引: {config.Index}");
+                    }
+                    // 如果选中的节点不属于当前订阅组，则完全不改变 config.Index
 
                     //If Update Success
                     if (count > 0)
@@ -811,63 +830,47 @@ namespace Shadowsocks.Controller
 
         private void ShowSettingForm()
         {
-            if (_settingsWindow != null)
-            {
-                _settingsWindow.Activate();
-            }
-            else
-            {
-                _settingsWindow = new SettingsWindow(controller);
-                _settingsWindow.Show();
-                _settingsWindow.Activate();
-                _settingsWindow.BringToFront();
-                _settingsWindow.Closed += (_, _) =>
-                {
-                    _settingsWindow = null;
-                };
-            }
+            ShowUnifiedSettingsWindow();
         }
 
         private void ShowDnsSettingWindow()
         {
-            if (_dnsSettingsWindow != null)
-            {
-                _dnsSettingsWindow.Activate();
-            }
-            else
-            {
-                _dnsSettingsWindow = new DnsSettingWindow();
-                _dnsSettingsWindow.Show();
-                _dnsSettingsWindow.Activate();
-                _dnsSettingsWindow.BringToFront();
-                _dnsSettingsWindow.Closed += (o, args) =>
-                {
-                    _dnsSettingsWindow = null;
-                };
-            }
+            ShowUnifiedSettingsWindow();
         }
 
         private void ShowPortMapForm()
         {
-            if (_portMapWindow != null)
+            ShowUnifiedSettingsWindow();
+        }
+
+        private void ShowUnifiedSettingsWindow()
+        {
+            try
             {
-                _portMapWindow.Activate();
-                _portMapWindow.UpdateLayout();
-                if (_portMapWindow.WindowState == WindowState.Minimized)
+                if (_unifiedSettingsWindow != null)
                 {
-                    _portMapWindow.WindowState = WindowState.Normal;
+                    _unifiedSettingsWindow.Activate();
+                    _unifiedSettingsWindow.UpdateLayout();
+                    if (_unifiedSettingsWindow.WindowState == WindowState.Minimized)
+                    {
+                        _unifiedSettingsWindow.WindowState = WindowState.Normal;
+                    }
+                }
+                else
+                {
+                    _unifiedSettingsWindow = new UnifiedSettingsWindow(controller);
+                    _unifiedSettingsWindow.Show();
+                    _unifiedSettingsWindow.Activate();
+                    _unifiedSettingsWindow.BringToFront();
+                    _unifiedSettingsWindow.Closed += (o, e) =>
+                    {
+                        _unifiedSettingsWindow = null;
+                    };
                 }
             }
-            else
+            catch (Exception ex)
             {
-                _portMapWindow = new PortSettingsWindow(controller);
-                _portMapWindow.Show();
-                _portMapWindow.Activate();
-                _portMapWindow.BringToFront();
-                _portMapWindow.Closed += (o, e) =>
-                {
-                    _portMapWindow = null;
-                };
+                System.Windows.MessageBox.Show($"ShowUnifiedSettingsWindow错误: {ex.Message}\n\n{ex.StackTrace}", "错误", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
         }
 
@@ -922,26 +925,7 @@ namespace Shadowsocks.Controller
 
         private void ShowSubscribeSettingForm()
         {
-            if (_subScribeWindow != null)
-            {
-                _subScribeWindow.Activate();
-                _subScribeWindow.UpdateLayout();
-                if (_subScribeWindow.WindowState == WindowState.Minimized)
-                {
-                    _subScribeWindow.WindowState = WindowState.Normal;
-                }
-            }
-            else
-            {
-                _subScribeWindow = new SubscribeWindow(controller);
-                _subScribeWindow.Show();
-                _subScribeWindow.Activate();
-                _subScribeWindow.BringToFront();
-                _subScribeWindow.Closed += (sender, args) =>
-                {
-                    _subScribeWindow = null;
-                };
-            }
+            ShowUnifiedSettingsWindow();
         }
 
         private void Config_Click(object sender, EventArgs e)

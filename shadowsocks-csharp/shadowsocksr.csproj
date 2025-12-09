@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -53,11 +53,10 @@
     <PackageReference Include="RouteMatcher" Version="1.0.0" />
     <PackageReference Include="RunAtStartup" Version="5.0.2" />
     <PackageReference Include="Shadowsocks.Protocol" Version="1.0.2" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="29.2.11" />
-    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="29.2.11" />
     <PackageReference Include="System.Reactive" Version="6.0.1" />
     <PackageReference Include="URIScheme" Version="5.0.0" />
     <PackageReference Include="WindowsProxy" Version="6.0.0" />
+    <PackageReference Include="WPF-UI" Version="4.1.0" />
   </ItemGroup>
   
   <ItemGroup>
@@ -150,12 +149,5 @@
     </Page>
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="cd &quot;$(ProjectDir)&quot;&#xD;&#xA;&#xD;&#xA;SyncfusionLicenseRegister.bat PreBuild Program.cs" />
-  </Target>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="cd &quot;$(ProjectDir)&quot;&#xD;&#xA;&#xD;&#xA;SyncfusionLicenseRegister.bat PostBuild Program.cs" />
-  </Target>
 
 </Project>

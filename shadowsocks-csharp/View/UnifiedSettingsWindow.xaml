@@ -1,0 +1,53 @@
+<ui:FluentWindow x:Class="Shadowsocks.View.UnifiedSettingsWindow"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                mc:Ignorable="d"
+                x:Name="SettingsWin"
+                Title="设置"
+                Height="700"
+                Width="1000"
+                WindowStartupLocation="CenterScreen"
+                ExtendsContentIntoTitleBar="True"
+                WindowBackdropType="Mica">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../I18N/SettingsWindow.en-US.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Title Bar -->
+        <ui:TitleBar Grid.Row="0" Title="ShadowsocksR 设置" />
+
+        <!-- Navigation View -->
+        <ui:NavigationView
+            x:Name="NavigationView"
+            Grid.Row="1"
+            IsBackButtonVisible="Collapsed"
+            IsPaneToggleVisible="True"
+            PaneDisplayMode="Left"
+            OpenPaneLength="200"
+            MenuItemsSource="{Binding NavigationItems}"
+            FooterMenuItemsSource="{Binding FooterNavigationItems}"
+            SelectionChanged="NavigationView_OnSelectionChanged">
+
+            <ui:NavigationView.ContentOverlay>
+                <Grid>
+                    <Frame x:Name="ContentFrame" NavigationUIVisibility="Hidden" />
+                </Grid>
+            </ui:NavigationView.ContentOverlay>
+
+        </ui:NavigationView>
+    </Grid>
+</ui:FluentWindow>
