@@ -32,7 +32,8 @@ function Update-Exe {
     }
 
     $bytes = [File]::ReadAllBytes($exe_path)
-    $index = (Get-Content $exe_path -Raw -Encoding 28591).IndexOf("$dll_name`0")
+    $content = [Encoding]::GetEncoding('iso-8859-1').GetString($bytes)
+    $index = $content.IndexOf("$dll_name`0")
     if ($index -lt 0) {
         throw [InvalidDataException] 'Could not find old dll path'
     }
@@ -48,7 +49,7 @@ function Update-Exe {
     $fs = [File]::OpenWrite($exe_path)
     try {
         $fs.Write($bytes, 0, $index)
-        $fs.Write($new_bytes)
+        $fs.Write($new_bytes, 0, $new_bytes.Length)
         $fs.Write($bytes, $end_postion, $end_length)
     }
     finally {
