@@ -21,7 +21,7 @@ namespace Shadowsocks.ViewModel
         public Server SelectedServer
         {
             get => _selectedServer;
-            private set => SetField(ref _selectedServer, value);
+            set => SetField(ref _selectedServer, value);
         }
 
         public void ReadConfig()

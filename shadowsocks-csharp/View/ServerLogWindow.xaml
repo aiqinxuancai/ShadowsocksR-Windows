@@ -1,35 +1,15 @@
 <Window x:Class="Shadowsocks.View.ServerLogWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         xmlns:model="clr-namespace:Shadowsocks.Model"
-        xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:valueConverter="clr-namespace:Shadowsocks.View.ValueConverter"
-        x:Name="Slw" >
+        x:Name="Slw">
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../I18N/ServerLogWindow.en-US.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            <system:String x:Key="IndexMappingName">Index</system:String>
-            <system:String x:Key="GroupMappingName">GroupName</system:String>
-            <system:String x:Key="ServerMappingName">FriendlyName</system:String>
-            <system:String x:Key="ConnectingMappingName">SpeedLog.Connecting</system:String>
-            <system:String x:Key="AvgConnectTimeMappingName">SpeedLog.AvgConnectTimeText</system:String>
-            <system:String x:Key="AvgDownloadBytesMappingName">SpeedLog.AvgDownloadBytesText</system:String>
-            <system:String x:Key="MaxDownSpeedMappingName">SpeedLog.MaxDownSpeedText</system:String>
-            <system:String x:Key="AvgUploadBytesMappingName">SpeedLog.AvgUploadBytesText</system:String>
-            <system:String x:Key="MaxUpSpeedMappingName">SpeedLog.MaxUpSpeedText</system:String>
-            <system:String x:Key="TotalDownloadBytesMappingName">SpeedLog.TotalDownloadBytesText</system:String>
-            <system:String x:Key="TotalUploadBytesMappingName">SpeedLog.TotalUploadBytesText</system:String>
-            <system:String x:Key="TotalDownloadRawBytesMappingName">SpeedLog.TotalDownloadRawBytesText</system:String>
-            <system:String x:Key="ConnectErrorMappingName">SpeedLog.ConnectError</system:String>
-            <system:String x:Key="ErrorTimeoutTimesMappingName">SpeedLog.ErrorTimeoutTimes</system:String>
-            <system:String x:Key="ErrorEmptyTimesMappingName">SpeedLog.ErrorEmptyTimes</system:String>
-            <system:String x:Key="ErrorContinuousTimesMappingName">SpeedLog.ErrorContinuousTimes</system:String>
-            <system:String x:Key="ErrorPercentMappingName">SpeedLog.ErrorPercent</system:String>
 
             <valueConverter:SpeedToBrushConverter x:Key="SpeedToBrushConverter" />
             <valueConverter:ConnectNumberToBrushConverter x:Key="ConnectNumberToBrushConverter" />
@@ -42,33 +22,52 @@
             <valueConverter:TotalUploadBackgroundBrushConvert x:Key="TotalUploadBackgroundBrushConvert" />
             <valueConverter:TotalDownloadRawBackgroundBrushConvert x:Key="TotalDownloadRawBackgroundBrushConvert" />
             <SolidColorBrush x:Key="BorderBrush">#E5E5E5</SolidColorBrush>
-            <Style TargetType="syncfusion:GridHeaderCellControl">
+
+            <Style TargetType="{x:Type DataGridColumnHeader}">
                 <Setter Property="Foreground" Value="Black" />
-                <Setter Property="BorderBrush" Value="#808080" />
-                <Setter Property="Background" Value="#CCCCCC" />
+                <Setter Property="BorderBrush" Value="#A8A8A8" />
+                <Setter Property="BorderThickness" Value="0,0,1,1" />
+                <Setter Property="Background" Value="#D8D8D8" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Padding" Value="10,0,10,0" />
             </Style>
-            <Style TargetType="syncfusion:HeaderRowControl">
+
+            <Style TargetType="{x:Type DataGridRow}">
+                <Setter Property="MinHeight" Value="28" />
             </Style>
-            <Style TargetType="syncfusion:GridRowHeaderCell">
-                <Setter Property="Background" Value="{Binding Path=Enable,Converter={StaticResource BooleanToEnabledConverter},Mode=OneWay}" />
+
+            <Style TargetType="{x:Type DataGridRowHeader}">
+                <Setter Property="Background" Value="{Binding Enable, Converter={StaticResource BooleanToEnabledConverter}}" />
                 <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
                 <Setter Property="BorderThickness" Value="0,0,1,1" />
+                <Setter Property="Padding" Value="0,2" />
             </Style>
-            <Style TargetType="syncfusion:VirtualizingCellsControl" x:Key="AlternatingRowStyle">
-                <Setter Property="Background" Value="#FAFAFA" />
-            </Style>
-            <Style TargetType="syncfusion:GridCell">
+
+            <Style TargetType="{x:Type DataGridCell}">
                 <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+                <Setter Property="BorderThickness" Value="0,0,1,1" />
+                <Setter Property="Padding" Value="8,2" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
             </Style>
-            <Style TargetType="syncfusion:GridCell" x:Key="BaseGridCell">
-                <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+
+            <Style x:Key="DataGridTextColumnElementStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="Margin" Value="2,0" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+
+            <Style x:Key="DataGridTemplateTextStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="Padding" Value="8,2" />
+                <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top" Background="White">
-                <MenuItem Header="{DynamicResource Control}" >
+                <MenuItem Header="{DynamicResource Control}">
                     <MenuItem Header="{DynamicResource DisconnectDirect}" Click="DisconnectDirectMenuItem_OnClick"/>
                     <MenuItem Header="{DynamicResource DisconnectAll}" Click="DisconnectAllMenuItem_OnClick"/>
                     <Separator />
@@ -89,192 +88,188 @@
                     <MenuItem Header="{DynamicResource AlwaysOnTop}" IsChecked="{Binding Topmost,ElementName=Slw}" Click="AlwaysTopMenuItem_OnClick"/>
                 </MenuItem>
             </Menu>
-            <syncfusion:SfDataGrid x:Name="ServerDataGrid"
-                                   AllowResizingHiddenColumns="False"
-                                   DataContext="{Binding ServerLogViewModel, ElementName=Slw}"
-                                   ItemsSource="{Binding ServersCollection}"
-                                   SourceType="{x:Type model:Server}"
-                                   AutoGenerateColumns="False"
-                                   ColumnSizer="Auto"
-                                   AlternatingRowStyle="{StaticResource AlternatingRowStyle}"
-                                   RowSelectionBrush="Transparent"
-                                   BorderThickness="0,1,0,0"
+            <DataGrid x:Name="ServerDataGrid"
+                      DataContext="{Binding ServerLogViewModel, ElementName=Slw}"
+                      ItemsSource="{Binding ServersCollection}"
+                      SelectedItem="{Binding SelectedServer, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserReorderColumns="True"
+                      CanUserResizeColumns="True"
+                      CanUserSortColumns="True"
+                      IsReadOnly="True"
+                      SelectionUnit="CellOrRowHeader"
+                      SelectionMode="Single"
+                      AlternatingRowBackground="#FAFAFA"
+                      BorderThickness="0,1,0,0"
+                      HeadersVisibility="All"
+                      RowHeaderWidth="18"
+                      RowHeight="28"
+                      ColumnHeaderHeight="30"
+                      PreviewMouseLeftButtonUp="ServerDataGrid_OnPreviewMouseLeftButtonUp"
+                      MouseDoubleClick="ServerDataGrid_OnMouseDoubleClick">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="IndexColumn" Header="{DynamicResource Index}" Binding="{Binding Index}" SortMemberPath="Index" Width="Auto" ElementStyle="{StaticResource DataGridTextColumnElementStyle}" />
+                    <DataGridTextColumn x:Name="GroupColumn" Header="{DynamicResource Group}" Binding="{Binding GroupName}" SortMemberPath="GroupName" Width="Auto" ElementStyle="{StaticResource DataGridTextColumnElementStyle}" />
 
-                                   SelectionUnit="Cell" SelectionMode="Single"
-                                   AllowEditing="False" AddNewRowPosition="None"
-                                   AllowResizingColumns="True"
-                                   AllowDeleting="False"
-                                   AllowDraggingRows="False" AllowDraggingColumns="True" AllowDrop="False"
-                                   AllowGrouping="False" ShowGroupDropArea="False"
-                                   AllowSorting="True" AllowFiltering="False" ShowSortNumbers="True"
-                                   ShowToolTip="True"
-                                   ShowRowHeader="True"
- 
-                                   EnableDataVirtualization="True"
-                                   ScrollMode="None" CanMaintainScrollPosition="True" ShowBusyIndicator="True"
-                                   CellTapped="ServerDataGrid_OnCellTapped"
-                                   CellDoubleTapped="ServerDataGrid_OnCellDoubleTapped"
-                                   MouseLeftButtonUp="ServerDataGrid_OnMouseLeftButtonUp"
-                                   >
-                <syncfusion:SfDataGrid.Columns>
-                    <syncfusion:GridNumericColumn MappingName="{StaticResource IndexMappingName}" NumberDecimalDigits="0" TextAlignment="Left" />
-
-                    <syncfusion:GridTextColumn MappingName="{StaticResource GroupMappingName}" AllowFiltering="True" />
-
-                    <syncfusion:GridTextColumn MappingName="{StaticResource ServerMappingName}" AllowFiltering="True" >
-                        <syncfusion:GridTextColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
+                    <DataGridTextColumn x:Name="ServerColumn" Header="{DynamicResource Server}" Binding="{Binding FriendlyName}" SortMemberPath="FriendlyName" Width="Auto" ElementStyle="{StaticResource DataGridTextColumnElementStyle}">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+                                <Setter Property="BorderThickness" Value="0,0,1,1" />
+                                <Setter Property="Padding" Value="8,2" />
+                                <Setter Property="VerticalContentAlignment" Value="Center" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsSelected,Mode=OneWay}" Value="True">
+                                    <DataTrigger Binding="{Binding IsSelected, Mode=OneWay}" Value="True">
                                         <Setter Property="Background" Value="#FF00FFAA" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </syncfusion:GridTextColumn.CellStyle>
-                    </syncfusion:GridTextColumn>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
 
-                    <syncfusion:GridNumericColumn MappingName="{StaticResource ConnectingMappingName}" NumberDecimalDigits="0" TextAlignment="Left">
-                        <syncfusion:GridNumericColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background"
-                                Value="{Binding Path=SpeedLog.Connecting,Converter={StaticResource ConnectNumberToBrushConverter},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridNumericColumn.CellStyle>
-                    </syncfusion:GridNumericColumn>
+                    <DataGridTemplateColumn x:Name="ConnectingColumn" Header="{DynamicResource Connecting}" SortMemberPath="SpeedLog.Connecting" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding SpeedLog.Connecting, Converter={StaticResource ConnectNumberToBrushConverter}}">
+                                    <TextBlock Text="{Binding SpeedLog.Connecting}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridNumericColumn MappingName="{StaticResource AvgConnectTimeMappingName}" NumberDecimalDigits="0" TextAlignment="Left">
-                        <syncfusion:GridNumericColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background"
-                                        Value="{Binding Path=SpeedLog.AvgConnectTimeText,Converter={StaticResource LatencyToBrushConverter},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridNumericColumn.CellStyle>
-                    </syncfusion:GridNumericColumn>
+                    <DataGridTemplateColumn x:Name="AvgConnectTimeColumn" Header="{DynamicResource Latency}" SortMemberPath="SpeedLog.AvgConnectTimeText" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding SpeedLog.AvgConnectTimeText, Converter={StaticResource LatencyToBrushConverter}}">
+                                    <TextBlock Text="{Binding SpeedLog.AvgConnectTimeText}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridTextColumn MappingName="{StaticResource AvgDownloadBytesMappingName}" 
-                                               DisplayBinding="{Binding SpeedLog.AvgDownloadBytesText,Mode=OneWay}" 
-                                               ValueBinding="{Binding SpeedLog.AvgDownloadBytes,Mode=OneWay}" SortMode="Value">
-                        <syncfusion:GridTextColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background"
-                                Value="{Binding SpeedLog.AvgDownloadBytes,Converter={StaticResource SpeedToBrushConverter},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridTextColumn.CellStyle>
-                    </syncfusion:GridTextColumn>
+                    <DataGridTemplateColumn x:Name="AvgDownloadBytesColumn" Header="{DynamicResource AvgDSpeed}" SortMemberPath="SpeedLog.AvgDownloadBytes" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding SpeedLog.AvgDownloadBytes, Converter={StaticResource SpeedToBrushConverter}}">
+                                    <TextBlock Text="{Binding SpeedLog.AvgDownloadBytesText}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridTextColumn MappingName="{StaticResource MaxDownSpeedMappingName}"
-                                               DisplayBinding="{Binding SpeedLog.MaxDownSpeedText,Mode=OneWay}"
-                                               ValueBinding="{Binding SpeedLog.MaxDownSpeed,Mode=OneWay}" SortMode="Value">
-                        <syncfusion:GridTextColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background" 
-                                Value="{Binding SpeedLog.MaxDownSpeed,Converter={StaticResource SpeedToBrushConverter},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridTextColumn.CellStyle>
-                    </syncfusion:GridTextColumn>
+                    <DataGridTemplateColumn x:Name="MaxDownSpeedColumn" Header="{DynamicResource MaxDSpeed}" SortMemberPath="SpeedLog.MaxDownSpeed" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding SpeedLog.MaxDownSpeed, Converter={StaticResource SpeedToBrushConverter}}">
+                                    <TextBlock Text="{Binding SpeedLog.MaxDownSpeedText}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridTextColumn MappingName="{StaticResource AvgUploadBytesMappingName}"
-                                               DisplayBinding="{Binding SpeedLog.AvgUploadBytesText,Mode=OneWay}"
-                                               ValueBinding="{Binding SpeedLog.AvgUploadBytes,Mode=OneWay}" SortMode="Value">
-                        <syncfusion:GridTextColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background"
-                                        Value="{Binding SpeedLog.AvgUploadBytes,Converter={StaticResource SpeedToBrushConverter},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridTextColumn.CellStyle>
-                    </syncfusion:GridTextColumn>
+                    <DataGridTemplateColumn x:Name="AvgUploadBytesColumn" Header="{DynamicResource AvgUpSpeed}" SortMemberPath="SpeedLog.AvgUploadBytes" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding SpeedLog.AvgUploadBytes, Converter={StaticResource SpeedToBrushConverter}}">
+                                    <TextBlock Text="{Binding SpeedLog.AvgUploadBytesText}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridTextColumn MappingName="{StaticResource MaxUpSpeedMappingName}"
-                                               DisplayBinding="{Binding SpeedLog.MaxUpSpeedText,Mode=OneWay}"
-                                               ValueBinding="{Binding SpeedLog.MaxUpSpeed,Mode=OneWay}" SortMode="Value">
-                        <syncfusion:GridTextColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background"
-                                        Value="{Binding SpeedLog.MaxUpSpeed,Converter={StaticResource SpeedToBrushConverter},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridTextColumn.CellStyle>
-                    </syncfusion:GridTextColumn>
+                    <DataGridTemplateColumn x:Name="MaxUpSpeedColumn" Header="{DynamicResource MaxUpSpeed}" SortMemberPath="SpeedLog.MaxUpSpeed" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding SpeedLog.MaxUpSpeed, Converter={StaticResource SpeedToBrushConverter}}">
+                                    <TextBlock Text="{Binding SpeedLog.MaxUpSpeedText}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridTextColumn MappingName="{StaticResource TotalDownloadBytesMappingName}"
-                                               DisplayBinding="{Binding SpeedLog.TotalDownloadBytesText,Mode=OneWay}"
-                                               ValueBinding="{Binding SpeedLog.TotalDownloadBytes,Mode=OneWay}" SortMode="Value">
-                        <syncfusion:GridTextColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background" Value="{Binding ColumnBase.RowIndex,RelativeSource={RelativeSource Self},Converter={StaticResource TotalDownloadBackgroundBrushConvert},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridTextColumn.CellStyle>
-                    </syncfusion:GridTextColumn>
+                    <DataGridTemplateColumn x:Name="TotalDownloadBytesColumn" Header="{DynamicResource Dload}" SortMemberPath="SpeedLog.TotalDownloadBytes" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding Index, Converter={StaticResource TotalDownloadBackgroundBrushConvert}}">
+                                    <TextBlock Text="{Binding SpeedLog.TotalDownloadBytesText}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridTextColumn MappingName="{StaticResource TotalUploadBytesMappingName}"
-                                               DisplayBinding="{Binding SpeedLog.TotalUploadBytesText,Mode=OneWay}"
-                                               ValueBinding="{Binding SpeedLog.TotalUploadBytes,Mode=OneWay}" SortMode="Value">
-                        <syncfusion:GridTextColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background" Value="{Binding ColumnBase.RowIndex,RelativeSource={RelativeSource Self},Converter={StaticResource TotalUploadBackgroundBrushConvert},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridTextColumn.CellStyle>
-                    </syncfusion:GridTextColumn>
+                    <DataGridTemplateColumn x:Name="TotalUploadBytesColumn" Header="{DynamicResource Upload}" SortMemberPath="SpeedLog.TotalUploadBytes" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding Index, Converter={StaticResource TotalUploadBackgroundBrushConvert}}">
+                                    <TextBlock Text="{Binding SpeedLog.TotalUploadBytesText}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridTextColumn MappingName="{StaticResource TotalDownloadRawBytesMappingName}"
-                                               DisplayBinding="{Binding SpeedLog.TotalDownloadRawBytesText,Mode=OneWay}"
-                                               ValueBinding="{Binding SpeedLog.TotalDownloadRawBytes,Mode=OneWay}" SortMode="Value">
-                        <syncfusion:GridTextColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background" Value="{Binding ColumnBase.RowIndex,RelativeSource={RelativeSource Self},Converter={StaticResource TotalDownloadRawBackgroundBrushConvert},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridTextColumn.CellStyle>
-                    </syncfusion:GridTextColumn>
+                    <DataGridTemplateColumn x:Name="TotalDownloadRawBytesColumn" Header="{DynamicResource DloadRaw}" SortMemberPath="SpeedLog.TotalDownloadRawBytes" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding Index, Converter={StaticResource TotalDownloadRawBackgroundBrushConvert}}">
+                                    <TextBlock Text="{Binding SpeedLog.TotalDownloadRawBytesText}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridNumericColumn MappingName="{StaticResource ConnectErrorMappingName}" NumberDecimalDigits="0" TextAlignment="Left">
-                        <syncfusion:GridNumericColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background"
-                                        Value="{Binding SpeedLog.ConnectError,Converter={StaticResource ConnectErrorToBrushConverter},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridNumericColumn.CellStyle>
-                    </syncfusion:GridNumericColumn>
+                    <DataGridTemplateColumn x:Name="ConnectErrorColumn" Header="{DynamicResource Error}" SortMemberPath="SpeedLog.ConnectError" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding SpeedLog.ConnectError, Converter={StaticResource ConnectErrorToBrushConverter}}">
+                                    <TextBlock Text="{Binding SpeedLog.ConnectError}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridNumericColumn MappingName="{StaticResource ErrorTimeoutTimesMappingName}" NumberDecimalDigits="0" TextAlignment="Left">
-                        <syncfusion:GridNumericColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background"
-                                        Value="{Binding SpeedLog.ErrorTimeoutTimes,Converter={StaticResource ConnectEmptyToBrushConverter},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridNumericColumn.CellStyle>
-                    </syncfusion:GridNumericColumn>
+                    <DataGridTemplateColumn x:Name="ErrorTimeoutTimesColumn" Header="{DynamicResource Timeout}" SortMemberPath="SpeedLog.ErrorTimeoutTimes" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding SpeedLog.ErrorTimeoutTimes, Converter={StaticResource ConnectEmptyToBrushConverter}}">
+                                    <TextBlock Text="{Binding SpeedLog.ErrorTimeoutTimes}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridNumericColumn MappingName="{StaticResource ErrorEmptyTimesMappingName}" NumberDecimalDigits="0" TextAlignment="Left">
-                        <syncfusion:GridNumericColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background"
-                                        Value="{Binding SpeedLog.ErrorEmptyTimes,Converter={StaticResource ConnectEmptyToBrushConverter},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridNumericColumn.CellStyle>
-                    </syncfusion:GridNumericColumn>
+                    <DataGridTemplateColumn x:Name="ErrorEmptyTimesColumn" Header="{DynamicResource EmptyResponse}" SortMemberPath="SpeedLog.ErrorEmptyTimes" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding SpeedLog.ErrorEmptyTimes, Converter={StaticResource ConnectEmptyToBrushConverter}}">
+                                    <TextBlock Text="{Binding SpeedLog.ErrorEmptyTimes}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridNumericColumn MappingName="{StaticResource ErrorContinuousTimesMappingName}" NumberDecimalDigits="0" TextAlignment="Left">
-                        <syncfusion:GridNumericColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background"
-                                        Value="{Binding SpeedLog.ErrorContinuousTimes,Converter={StaticResource ConnectEmptyToBrushConverter},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridNumericColumn.CellStyle>
-                    </syncfusion:GridNumericColumn>
+                    <DataGridTemplateColumn x:Name="ErrorContinuousTimesColumn" Header="{DynamicResource Continuous}" SortMemberPath="SpeedLog.ErrorContinuousTimes" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding SpeedLog.ErrorContinuousTimes, Converter={StaticResource ConnectEmptyToBrushConverter}}">
+                                    <TextBlock Text="{Binding SpeedLog.ErrorContinuousTimes}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <syncfusion:GridPercentColumn MappingName="{StaticResource ErrorPercentMappingName}" NullValue="0" AllowNullValue="True" 
-                                                  PercentDecimalDigits="0" TextAlignment="Left">
-                        <syncfusion:GridPercentColumn.CellStyle>
-                            <Style TargetType="syncfusion:GridCell" BasedOn="{StaticResource BaseGridCell}">
-                                <Setter Property="Background"
-                                        Value="{Binding SpeedLog.ErrorPercent,Converter={StaticResource ErrorPercentToBrushConverter},Mode=OneWay}" />
-                            </Style>
-                        </syncfusion:GridPercentColumn.CellStyle>
-                    </syncfusion:GridPercentColumn>
-
-                    <syncfusion:GridCheckBoxColumn MappingName="Enable" IsHidden="True" />
-
-                </syncfusion:SfDataGrid.Columns>
-            </syncfusion:SfDataGrid>
+                    <DataGridTemplateColumn x:Name="ErrorPercentColumn" Header="{DynamicResource ErrorPercent}" SortMemberPath="SpeedLog.ErrorPercent" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding SpeedLog.ErrorPercent, Converter={StaticResource ErrorPercentToBrushConverter}}">
+                                    <TextBlock Text="{Binding SpeedLog.ErrorPercent, StringFormat={}{0:0}%}" Style="{StaticResource DataGridTemplateTextStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
 
         </DockPanel>
     </Grid>

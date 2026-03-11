@@ -27,9 +27,23 @@ namespace Shadowsocks.ViewModel
             }
         }
 
+        private ServerTreeViewModel _selectedTreeItem;
+        public ServerTreeViewModel SelectedTreeItem
+        {
+            get => _selectedTreeItem;
+            set
+            {
+                if (SetField(ref _selectedTreeItem, value))
+                {
+                    ServersChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
         public void ReadServers(List<Server> configs)
         {
             ServersTreeViewCollection.Clear();
+            SelectedTreeItem = null;
             var subTags = new HashSet<string>(configs.Select(server => server.SubTag));
             foreach (var subTag in subTags)
             {

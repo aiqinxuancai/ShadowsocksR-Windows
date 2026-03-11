@@ -4,8 +4,6 @@ using Shadowsocks.Enums;
 using Shadowsocks.Model;
 using Shadowsocks.Util;
 using Shadowsocks.ViewModel;
-using Syncfusion.Data.Extensions;
-using Syncfusion.UI.Xaml.TreeView;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,12 +44,13 @@ namespace Shadowsocks.View
             _controller.ConfigChanged += controller_ConfigChanged;
             ServerConfigViewModel.ServersChanged += ServerViewModel_ServersChanged;
             _focusIndex = focusIndex;
-            ServersTreeView_OnSelectionChanged(this, new ItemSelectionChangedEventArgs());
+            UpdateEditorVisibility();
         }
 
         private void ServerViewModel_ServersChanged(object sender, EventArgs e)
         {
             ApplyButton.IsEnabled = true;
+            UpdateEditorVisibility();
         }
 
         private static readonly string[] Protocols = {
@@ -138,15 +137,13 @@ namespace Shadowsocks.View
             _modifiedConfiguration = Global.Load();
             ServerConfigViewModel.ReadServers(_modifiedConfiguration.Configs);
 
-            ServersTreeView.ExpandAll();
-            ServersTreeView.CollapseAll();
-
             if (scrollToSelectedItem)
             {
                 MoveToSelectedItem(_modifiedConfiguration.Index);
             }
 
             ApplyButton.IsEnabled = false;
+            UpdateEditorVisibility();
         }
 
         #region TreeView
@@ -171,15 +168,13 @@ namespace Shadowsocks.View
 
         private void MoveToSelectedItem(ServerTreeViewModel serverTreeViewModel)
         {
-            ServersTreeView.BringIntoView(serverTreeViewModel, false, true, ScrollToPosition.Center);
-            ServersTreeView.SelectedItems?.Clear();
-            ServersTreeView.SelectedItem = serverTreeViewModel;
-            ServersTreeView_OnSelectionChanged(this, new ItemSelectionChangedEventArgs());
+            ServerConfigViewModel.SelectedTreeItem = serverTreeViewModel;
+            UpdateEditorVisibility();
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ServersTreeView.SelectedItem is ServerTreeViewModel st)
+            if (ServerConfigViewModel.SelectedTreeItem is ServerTreeViewModel st)
             {
                 switch (st.Type)
                 {
@@ -217,6 +212,7 @@ namespace Shadowsocks.View
                         throw new ArgumentOutOfRangeException();
                 }
             }
+
             var newServer = new Server();
             ServerConfigViewModel.ReadServers(new List<Server> { newServer });
             MoveToSelectedItem(newServer.Id);
@@ -224,135 +220,24 @@ namespace Shadowsocks.View
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            var deleteItems = ServersTreeView.SelectedItems.ToArray();
-            foreach (var selectedItem in deleteItems)
+            if (ServerConfigViewModel.SelectedTreeItem is ServerTreeViewModel st)
             {
-                if (selectedItem is ServerTreeViewModel st)
-                {
-                    ServerTreeViewModel.Remove(ServerConfigViewModel.ServersTreeViewCollection, st);
-                    ServersTreeView.SelectedItems.Clear();
-                    ServersTreeView_OnSelectionChanged(this, new ItemSelectionChangedEventArgs());
-                }
+                ServerTreeViewModel.Remove(ServerConfigViewModel.ServersTreeViewCollection, st);
+                ServerConfigViewModel.SelectedTreeItem = null;
+                UpdateEditorVisibility();
             }
         }
 
-        private void ServersTreeView_OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+        private void ServersTreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (ServersTreeView.SelectedItems is not null
-                && ServersTreeView.SelectedItems.Count == 1
-                && ServersTreeView.SelectedItem is ServerTreeViewModel { Type: ServerTreeViewType.Server })
-            {
-                ServerGroupBox.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ServerGroupBox.Visibility = Visibility.Hidden;
-            }
+            UpdateEditorVisibility();
         }
 
-        private void ServersTreeView_OnItemDropping(object sender, TreeViewItemDroppingEventArgs e)
+        private void UpdateEditorVisibility()
         {
-            if (e.TargetNode.Content is ServerTreeViewModel target)
-            {
-                var source = e.DraggingNodes.Where(n => n.Content is ServerTreeViewModel).Select(n => (ServerTreeViewModel)n.Content).ToArray();
-                if (!source.Any())
-                {
-                    goto Skip;
-                }
-
-                if (source.Any(st => st.Type == ServerTreeViewType.Subtag))
-                {
-                    if (ServerTreeViewModel.FindParentNode(ServerConfigViewModel.ServersTreeViewCollection, target) != null)
-                    {
-                        goto Skip;
-                    }
-
-                    var res = e.DraggingNodes.Where(n => n.Content is ServerTreeViewModel st && st.Type == ServerTreeViewType.Subtag).ToArray();
-                    e.DraggingNodes.Clear();
-                    res.ForEach(x => e.DraggingNodes.Add(x));
-
-                    if (e.DropPosition == DropPosition.DropAsChild)
-                    {
-                        e.DropPosition = DropPosition.DropBelow;
-                    }
-                    return;
-                }
-                if (source.Any(st => st.Type == ServerTreeViewType.Group))
-                {
-                    var res = e.DraggingNodes.Where(n => n.Content is ServerTreeViewModel st && st.Type == ServerTreeViewType.Group).ToArray();
-                    e.DraggingNodes.Clear();
-                    res.ForEach(x => e.DraggingNodes.Add(x));
-
-                    if (target.Type == ServerTreeViewType.Subtag)
-                    {
-                        goto Skip;
-                    }
-                    if (target.Type == ServerTreeViewType.Group)
-                    {
-                        var parent = ServerTreeViewModel.FindParentNode(ServerConfigViewModel.ServersTreeViewCollection, target);
-                        if (parent == null)
-                        {
-                            goto Skip;
-                        }
-
-                        var isSameParent = e.DraggingNodes.All(n => n.Content is ServerTreeViewModel st
-                           && ServerTreeViewModel.FindParentNode(ServerConfigViewModel.ServersTreeViewCollection, st) == parent);
-
-                        if (!isSameParent)
-                        {
-                            goto Skip;
-                        }
-
-                        if (e.DropPosition == DropPosition.DropAsChild)
-                        {
-                            e.DropPosition = DropPosition.DropBelow;
-                        }
-                        return;
-                    }
-                    goto Skip;
-                }
-                // all is servers
-                if (target.Type == ServerTreeViewType.Subtag)
-                {
-                    goto Skip;
-                }
-                if (target.Type == ServerTreeViewType.Group)
-                {
-                    var sub = ServerTreeViewModel.FindParentNode(ServerConfigViewModel.ServersTreeViewCollection, target);
-                    if (sub == null)
-                    {
-                        return;
-                    }
-
-                    var subName = sub.Name == I18NUtil.GetAppStringValue(@"EmptySubtag") ? string.Empty : sub.Name;
-                    var groupName = target.Name == I18NUtil.GetAppStringValue(@"EmptyGroup") ? string.Empty : target.Name;
-
-                    e.DraggingNodes.ForEach(n =>
-                    {
-                        var server = ((ServerTreeViewModel)n.Content).Server;
-                        server.Group = groupName;
-                        server.SubTag = subName;
-                    });
-
-                    e.DropPosition = DropPosition.DropAsChild;
-                    return;
-                }
-
-                e.DraggingNodes.ForEach(n =>
-                {
-                    var server = ((ServerTreeViewModel)n.Content).Server;
-                    server.Group = target.Server.Group;
-                    server.SubTag = target.Server.SubTag;
-                });
-
-                if (e.DropPosition == DropPosition.DropAsChild)
-                {
-                    e.DropPosition = DropPosition.DropBelow;
-                }
-                return;
-            }
-Skip:
-            e.Handled = true;
+            ServerGroupBox.Visibility = ServerConfigViewModel.SelectedTreeItem is { Type: ServerTreeViewType.Server }
+                ? Visibility.Visible
+                : Visibility.Hidden;
         }
 
         #endregion
