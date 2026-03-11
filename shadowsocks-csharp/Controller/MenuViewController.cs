@@ -310,10 +310,29 @@ namespace Shadowsocks.Controller
                             ((MenuItem)menuItem.Items[11]).Click += DisconnectCurrent_Click;
                             break;
                         }
-                        case @"ServersSubscribe":
+                        case @"SubscribeSettingMenu":
                         {
-                            ((MenuItem)menuItem.Items[0]).Click += SubscribeSetting_Click;
-                            ((MenuItem)menuItem.Items[1]).Click += CheckNodeUpdate_Click;
+                            menuItem.Click += SubscribeSetting_Click;
+                            break;
+                        }
+                        case @"UpdateSubscribeMenu":
+                        {
+                            menuItem.Click += CheckNodeUpdate_Click;
+                            break;
+                        }
+                        case @"GlobalSettings":
+                        {
+                            menuItem.Click += Setting_Click;
+                            break;
+                        }
+                        case @"DnsSettings":
+                        {
+                            menuItem.Click += DnsSetting_Click;
+                            break;
+                        }
+                        case @"PortSettings":
+                        {
+                            menuItem.Click += ShowPortMapItem_Click;
                             break;
                         }
                         case @"ShowLogs":
@@ -324,14 +343,11 @@ namespace Shadowsocks.Controller
                         case @"More":
                         {
                             _moreMenu = menuItem;
-                            ((MenuItem)_moreMenu.Items[0]).Click += Setting_Click;
-                            ((MenuItem)_moreMenu.Items[1]).Click += DnsSetting_Click;
-                            ((MenuItem)_moreMenu.Items[2]).Click += ShowPortMapItem_Click;
-                            ((MenuItem)_moreMenu.Items[3]).Click += ShowUrlFromQrCode;
-                            ((MenuItem)_moreMenu.Items[5]).Click += OpenWiki_Click;
-                            ((MenuItem)_moreMenu.Items[6]).Click += FeedbackItem_Click;
+                            ((MenuItem)_moreMenu.Items[0]).Click += ShowUrlFromQrCode;
+                            ((MenuItem)_moreMenu.Items[2]).Click += OpenWiki_Click;
+                            ((MenuItem)_moreMenu.Items[3]).Click += FeedbackItem_Click;
 
-                            _updateMenu = (MenuItem)_moreMenu.Items[8];
+                            _updateMenu = (MenuItem)_moreMenu.Items[5];
 
                             ((MenuItem)_updateMenu.Items[0]).Click += CheckUpdate_Click;
                             UpdateItem = (MenuItem)_updateMenu.Items[1];

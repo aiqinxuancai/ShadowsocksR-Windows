@@ -50,16 +50,16 @@
             <MenuItem x:Name="ServerStatistic" />
             <MenuItem x:Name="DisconnectCurrent" />
         </MenuItem>
-        <MenuItem x:Name="ServersSubscribe">
-            <MenuItem x:Name="SubscribeSetting" />
-            <MenuItem x:Name="UpdateSubscribeSsrNode" />
-        </MenuItem>
-        <MenuItem x:Name="ShowLogs" />
         <Separator />
+        <MenuItem x:Name="SubscribeSettingMenu" />
+        <MenuItem x:Name="UpdateSubscribeMenu" />
+        <Separator />
+        <MenuItem x:Name="GlobalSettings" />
+        <MenuItem x:Name="DnsSettings" />
+        <MenuItem x:Name="PortSettings" />
+        <Separator />
+        <MenuItem x:Name="ShowLogs" />
         <MenuItem x:Name="More">
-            <MenuItem x:Name="GlobalSettings" />
-            <MenuItem x:Name="DnsSettings" />
-            <MenuItem x:Name="PortSettings" />
             <MenuItem x:Name="GenQrCode" />
             <Separator />
             <MenuItem x:Name="OpenWiki" />

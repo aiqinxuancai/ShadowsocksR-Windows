@@ -41,6 +41,8 @@
     <sys:String x:Key="ServersSubscribe">Subscription</sys:String>
     <sys:String x:Key="SubscribeSetting">Setting</sys:String>
     <sys:String x:Key="UpdateSubscribeSsrNode">Update</sys:String>
+    <sys:String x:Key="SubscribeSettingMenu">Subscribe Settings</sys:String>
+    <sys:String x:Key="UpdateSubscribeMenu">Update Subscription</sys:String>
 
     <sys:String x:Key="ShowLogs">Show logs...</sys:String>
     <sys:String x:Key="UpdateAvailable">Update available</sys:String>

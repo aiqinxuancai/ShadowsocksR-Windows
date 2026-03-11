@@ -41,6 +41,8 @@
     <sys:String x:Key="ServersSubscribe">订阅</sys:String>
     <sys:String x:Key="SubscribeSetting">设置</sys:String>
     <sys:String x:Key="UpdateSubscribeSsrNode">更新</sys:String>
+    <sys:String x:Key="SubscribeSettingMenu">订阅设置</sys:String>
+    <sys:String x:Key="UpdateSubscribeMenu">更新订阅</sys:String>
 
     <sys:String x:Key="ShowLogs">日志</sys:String>
     <sys:String x:Key="UpdateAvailable">更新可用</sys:String>
