@@ -51,12 +51,8 @@
             <MenuItem x:Name="DisconnectCurrent" />
         </MenuItem>
         <Separator />
-        <MenuItem x:Name="SubscribeSettingMenu" />
+        <MenuItem x:Name="SettingsHubMenu" />
         <MenuItem x:Name="UpdateSubscribeMenu" />
-        <Separator />
-        <MenuItem x:Name="GlobalSettings" />
-        <MenuItem x:Name="DnsSettings" />
-        <MenuItem x:Name="PortSettings" />
         <Separator />
         <MenuItem x:Name="ShowLogs" />
         <MenuItem x:Name="More">

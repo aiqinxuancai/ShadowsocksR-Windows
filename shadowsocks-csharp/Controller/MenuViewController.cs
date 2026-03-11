@@ -66,9 +66,8 @@ namespace Shadowsocks.Controller
         private MenuItem UpdateItem;
         private MenuItem AutoCheckUpdateItem;
         private MenuItem AllowPreReleaseItem;
+        private SettingsHubWindow _settingsHubWindow;
         private ServerConfigWindow _serverConfigWindow;
-        private SettingsWindow _settingsWindow;
-        private DnsSettingWindow _dnsSettingsWindow;
 
         #region ServerLogWindow
 
@@ -77,8 +76,6 @@ namespace Shadowsocks.Controller
 
         #endregion
 
-        private PortSettingsWindow _portMapWindow;
-        private SubscribeWindow _subScribeWindow;
         private LogWindow _logWindow;
         private string _urlToOpen;
         private System.Timers.Timer timerDelayCheckUpdate;
@@ -310,29 +307,14 @@ namespace Shadowsocks.Controller
                             ((MenuItem)menuItem.Items[11]).Click += DisconnectCurrent_Click;
                             break;
                         }
-                        case @"SubscribeSettingMenu":
+                        case @"SettingsHubMenu":
                         {
-                            menuItem.Click += SubscribeSetting_Click;
+                            menuItem.Click += Setting_Click;
                             break;
                         }
                         case @"UpdateSubscribeMenu":
                         {
                             menuItem.Click += CheckNodeUpdate_Click;
-                            break;
-                        }
-                        case @"GlobalSettings":
-                        {
-                            menuItem.Click += Setting_Click;
-                            break;
-                        }
-                        case @"DnsSettings":
-                        {
-                            menuItem.Click += DnsSetting_Click;
-                            break;
-                        }
-                        case @"PortSettings":
-                        {
-                            menuItem.Click += ShowPortMapItem_Click;
                             break;
                         }
                         case @"ShowLogs":
@@ -827,64 +809,42 @@ namespace Shadowsocks.Controller
 
         private void ShowSettingForm()
         {
-            if (_settingsWindow != null)
+            ShowSettingsHub(SettingsHubTab.General);
+        }
+
+        private void ShowSettingsHub(SettingsHubTab tab)
+        {
+            if (_settingsHubWindow != null)
             {
-                _settingsWindow.Activate();
+                _settingsHubWindow.SelectTab(tab);
+                _settingsHubWindow.Activate();
+                _settingsHubWindow.UpdateLayout();
+                if (_settingsHubWindow.WindowState == WindowState.Minimized)
+                {
+                    _settingsHubWindow.WindowState = WindowState.Normal;
+                }
             }
             else
             {
-                _settingsWindow = new SettingsWindow(controller);
-                _settingsWindow.Show();
-                _settingsWindow.Activate();
-                _settingsWindow.BringToFront();
-                _settingsWindow.Closed += (_, _) =>
+                _settingsHubWindow = new SettingsHubWindow(controller, tab);
+                _settingsHubWindow.Show();
+                _settingsHubWindow.Activate();
+                _settingsHubWindow.BringToFront();
+                _settingsHubWindow.Closed += (_, _) =>
                 {
-                    _settingsWindow = null;
+                    _settingsHubWindow = null;
                 };
             }
         }
 
         private void ShowDnsSettingWindow()
         {
-            if (_dnsSettingsWindow != null)
-            {
-                _dnsSettingsWindow.Activate();
-            }
-            else
-            {
-                _dnsSettingsWindow = new DnsSettingWindow();
-                _dnsSettingsWindow.Show();
-                _dnsSettingsWindow.Activate();
-                _dnsSettingsWindow.BringToFront();
-                _dnsSettingsWindow.Closed += (o, args) =>
-                {
-                    _dnsSettingsWindow = null;
-                };
-            }
+            ShowSettingsHub(SettingsHubTab.Dns);
         }
 
         private void ShowPortMapForm()
         {
-            if (_portMapWindow != null)
-            {
-                _portMapWindow.Activate();
-                _portMapWindow.UpdateLayout();
-                if (_portMapWindow.WindowState == WindowState.Minimized)
-                {
-                    _portMapWindow.WindowState = WindowState.Normal;
-                }
-            }
-            else
-            {
-                _portMapWindow = new PortSettingsWindow(controller);
-                _portMapWindow.Show();
-                _portMapWindow.Activate();
-                _portMapWindow.BringToFront();
-                _portMapWindow.Closed += (o, e) =>
-                {
-                    _portMapWindow = null;
-                };
-            }
+            ShowSettingsHub(SettingsHubTab.Port);
         }
 
         private void ShowServerLogForm()
@@ -938,26 +898,7 @@ namespace Shadowsocks.Controller
 
         private void ShowSubscribeSettingForm()
         {
-            if (_subScribeWindow != null)
-            {
-                _subScribeWindow.Activate();
-                _subScribeWindow.UpdateLayout();
-                if (_subScribeWindow.WindowState == WindowState.Minimized)
-                {
-                    _subScribeWindow.WindowState = WindowState.Normal;
-                }
-            }
-            else
-            {
-                _subScribeWindow = new SubscribeWindow(controller);
-                _subScribeWindow.Show();
-                _subScribeWindow.Activate();
-                _subScribeWindow.BringToFront();
-                _subScribeWindow.Closed += (sender, args) =>
-                {
-                    _subScribeWindow = null;
-                };
-            }
+            ShowSettingsHub(SettingsHubTab.Subscribe);
         }
 
         private void Config_Click(object sender, EventArgs e)
@@ -1014,6 +955,11 @@ namespace Shadowsocks.Controller
         public void Quit_Click(object sender, EventArgs e)
         {
             controller.Stop();
+            if (_settingsHubWindow != null)
+            {
+                _settingsHubWindow.Close();
+                _settingsHubWindow = null;
+            }
             if (_serverConfigWindow != null)
             {
                 _serverConfigWindow.Close();

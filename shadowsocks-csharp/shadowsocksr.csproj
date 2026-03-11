@@ -42,6 +42,7 @@
     <None Remove="View\PortSettingsWindow.xaml" />
     <None Remove="View\QRCodeSplashWindow.xaml" />
     <None Remove="View\ServerLogWindow.xaml" />
+    <None Remove="View\SettingsHubWindow.xaml" />
     <None Remove="View\ShowTextWindow.xaml" />
     <None Remove="View\SubscribeWindow.xaml" />
   </ItemGroup>
@@ -135,6 +136,15 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="I18N\SubscribeWindow.zh-TW.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="I18N\SettingsHubWindow.en-US.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="I18N\SettingsHubWindow.zh-CN.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="I18N\SettingsHubWindow.zh-TW.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="I18N\ConfigWindow.en-US.xaml">

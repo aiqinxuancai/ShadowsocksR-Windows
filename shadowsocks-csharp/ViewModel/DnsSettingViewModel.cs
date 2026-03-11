@@ -86,7 +86,11 @@ namespace Shadowsocks.ViewModel
 
         public void ReadConfig()
         {
-            var config = Global.Load();
+            ReadConfig(Global.Load());
+        }
+
+        public void ReadConfig(Configuration config)
+        {
             Clients.Clear();
             foreach (var client in config.DnsClients)
             {
@@ -99,13 +103,18 @@ namespace Shadowsocks.ViewModel
 
         public void SaveConfig()
         {
-            Global.GuiConfig.DnsClients.Clear();
-            foreach (var client in Clients)
-            {
-                Global.GuiConfig.DnsClients.Add(client);
-            }
+            ApplyTo(Global.GuiConfig);
             DnsUtil.DnsBuffer.Clear();
             Global.Controller.SaveAndNotifyChanged();
+        }
+
+        public void ApplyTo(Configuration config)
+        {
+            config.DnsClients.Clear();
+            foreach (var client in Clients)
+            {
+                config.DnsClients.Add(client);
+            }
         }
 
         public void AddNewDns()
