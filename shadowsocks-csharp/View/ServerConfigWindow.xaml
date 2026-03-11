@@ -3,15 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         xmlns:valueConverter="clr-namespace:Shadowsocks.View.ValueConverter"
         xmlns:controls="clr-namespace:Shadowsocks.View.Controls"
         mc:Ignorable="d"
-        x:Name="Cw"
+        x:Name="Cw" 
         Title="ConfigWindow" Height="560" Width="800" WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
         Activated="ConfigWindow_OnActivated"
-        Style="{StaticResource {x:Type Window}}"
         >
 
     <Window.Resources>
@@ -19,26 +18,20 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../I18N/ConfigWindow.en-US.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="LightGray" />
+            <Style TargetType="{x:Type TextBox}">
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Background" Value="{StaticResource DisabledBackgroundBrush}" />
+                    </Trigger>
+                    <Trigger Property="IsReadOnly" Value="True">
+                        <Setter Property="Background" Value="{StaticResource DisabledBackgroundBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <BooleanToVisibilityConverter x:Key="Bool2Visibility" />
             <valueConverter:ServerTreeTypeToFontConverter x:Key="ServerTreeTypeToFontConverter" />
             <valueConverter:BooleanToEnabledConverter x:Key="BooleanToEnabledConverter" />
-
-            <!-- HierarchicalDataTemplate for TreeView -->
-            <HierarchicalDataTemplate x:Key="TreeViewItemTemplate" ItemsSource="{Binding Nodes}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <CheckBox x:Name="CheckBox" FocusVisualStyle="{x:Null}" Margin="0,3,3,0"
-                              VerticalAlignment="Center" Height="22"
-                              IsChecked="{Binding Server.Enable, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                              Visibility="{Binding Type,Converter={StaticResource BooleanToEnabledConverter}}" />
-                    <TextBlock Grid.Column="1" Text="{Binding Name}"
-                               VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FontSize="14" Height="22"
-                               Foreground="{Binding Type,Converter={StaticResource ServerTreeTypeToFontConverter}}"
-                               FontWeight="{Binding Type,Converter={StaticResource ServerTreeTypeToFontConverter}}" />
-                </Grid>
-            </HierarchicalDataTemplate>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -63,40 +56,57 @@
                       VerticalAlignment="Stretch"
                       Width="3" Visibility="Collapsed"/>
 
-        <TreeView x:Name="ServersTreeView"
-                  Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="10,0,10,10"
-                  DataContext="{Binding Path=ServerConfigViewModel, ElementName=Cw}"
-                  ItemsSource="{Binding ServersTreeViewCollection}"
-                  ItemTemplate="{StaticResource TreeViewItemTemplate}"
-                  AllowDrop="True"
-                  SelectedItemChanged="ServersTreeView_OnSelectionChanged"
-                  DragOver="ServersTreeView_OnDragOver"
-                  Drop="ServersTreeView_OnDrop"
-                  PreviewMouseLeftButtonDown="ServersTreeView_OnPreviewMouseLeftButtonDown"
-                  PreviewMouseMove="ServersTreeView_OnPreviewMouseMove"
-                  >
-            <TreeView.ContextMenu>
+        <syncfusion:SfTreeView x:Name="ServersTreeView"
+                               Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="10,0,10,10"
+                               ChildPropertyName="Nodes"
+                               FullRowSelect="True"
+                               IsAnimationEnabled="False"
+                               SelectionMode="Extended"
+                               ItemTemplateDataContextType="Item"
+                               AutoExpandMode="AllNodes"
+                               DataContext="{Binding Path=ServerConfigViewModel, ElementName=Cw}"
+                               ItemsSource="{Binding ServersTreeViewCollection}"
+                               ExpandActionTrigger="Expander"
+                               AllowDragging="True"
+                               SelectionChanged="ServersTreeView_OnSelectionChanged"
+                               ItemDropping="ServersTreeView_OnItemDropping"
+                               >
+            <syncfusion:SfTreeView.ContextMenu>
                 <ContextMenu>
-                    <ui:MenuItem Header="{DynamicResource Add}" Click="AddButton_Click" />
-                    <ui:MenuItem Header="{DynamicResource Delete}" Click="DeleteButton_Click" />
+                    <MenuItem Header="{DynamicResource Add}" Click="AddButton_Click" />
+                    <MenuItem Header="{DynamicResource Delete}" Click="DeleteButton_Click" />
                 </ContextMenu>
-            </TreeView.ContextMenu>
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
-                    <Setter Property="IsExpanded" Value="True" />
-                </Style>
-            </TreeView.ItemContainerStyle>
-        </TreeView>
-        <ui:Button x:Name="ShowQrCodeButton" Grid.Row="1" Grid.Column="1" Margin="10,10,10,0" Content=">>" HorizontalAlignment="Right" Width="40" Click="ShowQrCodeButton_OnClick" Appearance="Secondary"/>
+            </syncfusion:SfTreeView.ContextMenu>
+            <syncfusion:SfTreeView.ItemTemplate>
+                <DataTemplate>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <CheckBox x:Name="CheckBox" FocusVisualStyle="{x:Null}" Margin="0,3,3,0"
+                                  VerticalAlignment="Center" Height="22"
+                                  IsChecked="{Binding Server.Enable, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                  Visibility="{Binding Type,Converter={StaticResource BooleanToEnabledConverter}}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Name}" 
+                                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FontSize="14" Height="22"
+                                   Foreground="{Binding Type,Converter={StaticResource ServerTreeTypeToFontConverter}}"
+                                   FontWeight="{Binding Type,Converter={StaticResource ServerTreeTypeToFontConverter}}" />
+                    </Grid>
+                </DataTemplate>
+            </syncfusion:SfTreeView.ItemTemplate>
+
+        </syncfusion:SfTreeView>
+        <Button x:Name="ShowQrCodeButton" Grid.Row="1" Grid.Column="1" Margin="10,10,10,0" Content=">>" HorizontalAlignment="Right" Width="40" Click="ShowQrCodeButton_OnClick"/>
         <Grid Grid.Row="2" Grid.Column="1" Margin="5,10,10,10" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <ui:Button Grid.Column="0" Content="{DynamicResource Ok}" FontSize="14" Click="OkButton_Click" Appearance="Primary" Margin="0,0,5,0"/>
-            <ui:Button Grid.Column="1" Content="{DynamicResource Cancel}" FontSize="14" Click="CancelButton_Click" Appearance="Secondary" Margin="5,0,5,0"/>
-            <ui:Button x:Name="ApplyButton" Grid.Column="2" Content="{DynamicResource Apply}" FontSize="14" Click="ApplyButton_Click" Appearance="Secondary" Margin="5,0,0,0"/>
+            <Button Grid.Column="0" Content="{DynamicResource Ok}" FontSize="14" Click="OkButton_Click"></Button>
+            <Button Grid.Column="1" Content="{DynamicResource Cancel}" FontSize="14" Click="CancelButton_Click"></Button>
+            <Button x:Name="ApplyButton" Grid.Column="2" Content="{DynamicResource Apply}" FontSize="14" Click="ApplyButton_Click"></Button>
         </Grid>
         <GroupBox x:Name="ServerGroupBox" Grid.Row="0" Grid.Column="1" Header="{DynamicResource Server}" Margin="5,0,5,0"
                   DataContext="{Binding Path=ServerConfigViewModel, ElementName=Cw}">

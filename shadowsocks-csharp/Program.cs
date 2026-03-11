@@ -29,7 +29,7 @@ namespace Shadowsocks
             //}
 //            using var d = singleInstance.Received.Subscribe(ArgumentsReceived);
 
-            var app = new App
+            var app = new Application
             {
                 ShutdownMode = ShutdownMode.OnExplicitShutdown
             };
@@ -38,6 +38,8 @@ namespace Shadowsocks
 
             SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
             app.Exit += App_Exit;
+
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(@"##SyncfusionLicense##");
 
             Global.LoadConfig();
 

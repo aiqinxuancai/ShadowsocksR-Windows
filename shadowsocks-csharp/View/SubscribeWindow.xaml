@@ -4,7 +4,6 @@
         xmlns:model="clr-namespace:Shadowsocks.Model"
         xmlns:enums="clr-namespace:Shadowsocks.Enums"
         xmlns:valueConverter="clr-namespace:Shadowsocks.View.ValueConverter"
-        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         x:Name="Sw"
         Title="{DynamicResource Title}"
         Height="360" Width="680"
